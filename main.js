@@ -56,6 +56,14 @@ btnGetQuote.addEventListener( 'click', getQuoteButtonClick );
 canvasChart.width = window.innerWidth - 50;
 canvasChart.height = 500;
 
+// restrict stock symbol to valid characters only
+const regex = new RegExp("^[a-zA-Z.]*$");
+inputStockSymbol.addEventListener( 'beforeinput', ( event ) =>
+{
+  if ( event.data != null && !regex.test( event.data ) )
+    event.preventDefault();
+} );
+
 
 // functions:
 
