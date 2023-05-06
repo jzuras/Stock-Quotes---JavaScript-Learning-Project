@@ -10,6 +10,39 @@ export type TimeSeriesStockData =
 
 let apikey = ''; // client needs to get this from user
 
+async function getTimeSeriesForDate( symbolToUse, dateToUse )
+{
+    try 
+    {
+        // note - keeping this here for local testing, to reduce # of API calls.
+        //const apiString = './quoteTimeSeries.json';
+        
+        // get date in format: 1970-01-01T00:00:00.000Z
+        let dateInISOFormat = dateToUse.toISOString();
+        let dateOnly = dateInISOFormat.slice(0, 10);
+
+        const apiString =
+            'https://api.twelvedata.com/time_series?interval=5min&order=ASC' +
+            '&date=' + dateOnly + '&apikey=' + encodeURI( apikey ) +
+            '&symbol=' + encodeURI( symbolToUse );
+        
+        const response = await fetch( apiString );
+
+        if ( !response.ok ) 
+        {
+            throw new Error( `HTTP error: ${response.status}` );
+        }
+      
+        const timeSeriesData = await response.json();
+
+        return timeSeriesData;
+    }    
+    catch ( error )
+    {
+        throw error;
+    }
+}
+
 /**
  * To avoid putting sensitive info into public, get this from user.
  * NOTE - assumption is that this key has been validated elsewhere.
@@ -31,28 +64,39 @@ export async function getTimeSeries( symbolToUse )
 {
     try 
     {
-        // note - keeping this here for local testing, to save on API calls.
-        //const apiString = './quoteTimeSeries.json';
-        
-        const apiString =
-            'https://api.twelvedata.com/time_series?interval=5min&order=ASC' +
-            '&date=today&apikey=' + encodeURI( apikey ) +
-            '&symbol=' + encodeURI( symbolToUse );
-        
-        const response = await fetch( apiString );
+        let timeSeriesData;
 
-        if ( !response.ok ) 
+        // timeSeriesData may fail when market did not open for the day (weekend)
+        // or has not yet opened (pre-market)
+        // in these cases, attempt to get yesterday's data
+        // if still an issue, keep going back one day, but try a max of 4 times
+        // (if the market was closed for more than 4 days, throw error)
+        let maxTries = 1;
+        let success = false;
+        const dateToTry = new Date(); // today
+        while ( maxTries < 5 && !success )
         {
-            throw new Error( `HTTP error: ${response.status}` );
+            timeSeriesData =
+                await getTimeSeriesForDate( symbolToUse, dateToTry );
+            if ( timeSeriesData.hasOwnProperty( 'code' ) &&
+                timeSeriesData.code === 400 )
+            {
+                // keep trying - may remove this part
+                dateToTry.setDate( dateToTry.getDate() - 1 );
+                maxTries++;
+            }
+            else
+            {
+                success = true;
+            }
         }
-      
-        const timeSeriesData = await response.json();
         return mergeQuote( timeSeriesData );
-    }    
+    }
     catch ( error )
     {
         throw error;
     }
+
 }
   
 
