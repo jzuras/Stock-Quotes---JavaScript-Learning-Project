@@ -118,6 +118,11 @@ export function drawChart( chartCanvas, data )
     ctx.fillText( '12 Noon', xValue - 20, chartCanvas.height - yPadding + 20 );
     xValue = ( 4.5 / 6.5 ) * ( chartCanvas.width - xPadding ) + xPadding;
     ctx.fillText( '2 PM', xValue - 20, chartCanvas.height - yPadding + 20 );
+    // need to display date for which we have data as it may not be today
+    xValue = ( 6.0 / 6.5 ) * ( chartCanvas.width - xPadding ) + xPadding;
+    const dateOfData = "Prices on " +
+        data[0].X.slice( 0, 10 );
+    ctx.fillText( dateOfData, xValue - 20, chartCanvas.height - yPadding + 20 );
 
     // draw 3 labels to left of y axis, and draw a gray dashed line across 
     // for each label
