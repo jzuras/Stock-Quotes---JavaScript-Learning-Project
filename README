@@ -20,6 +20,6 @@ There is also a monthly limit, as well as a limit of 8 quotes per minute, so
 the refresh code only updates a quote every thirty seconds, and for just 3 times.
 
 Since publishing the api key on GitHub is not a good idea, the user is asked for
-this information. Once this is running on GitHub Pages, I can provide that info
+this information. To run under GitHub Pages, I can provide the api key
 for any recruiters that might want to try it out. There is also a new TS version
 that uses my Azure Function and does not require the api key.
