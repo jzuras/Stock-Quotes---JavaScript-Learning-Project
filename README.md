@@ -1,3 +1,5 @@
+# Stock Quotes - JavaScript Learning Project
+
 This is a learning project for myself, and it is not expected to be useful 
 to the world at large.
 
@@ -7,6 +9,7 @@ what's been happening with JavaScript.
 
 I am starting with this project, in JavaScript, before eventually moving it to
 TypeScript. (I will likely create a separate Repo for that version.)
+Update: the TypeScript version can be found [here](https://github.com/jzuras/Stock-Quotes-TypeScript).
 
 The concept of the project is to pull stock quotes, displaying static quotes
 in a chart, with the ability to ask for periodic refreshes. The user can also
@@ -21,5 +24,8 @@ the refresh code only updates a quote every thirty seconds, and for just 3 times
 
 Since publishing the api key on GitHub is not a good idea, the user is asked for
 this information. To run under GitHub Pages, I can provide the api key
-for any recruiters that might want to try it out. There is also a new TS version
-that uses my Azure Function and does not require the api key.
+for any recruiters that might want to try it out. There is also a new [TS version](https://github.com/jzuras/Stock-Quotes-TypeScript---Azure-Client)
+that uses my Azure Functions and does not require the api key.
+
+I go into more detail on this in my discussion on 
+[LinkedIn](https://www.linkedin.com/posts/jimzuras_my-learning-journey-part-1-stock-quotes-activity-7058796727692140544-XntD).
